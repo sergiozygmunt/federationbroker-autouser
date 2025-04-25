@@ -9,12 +9,23 @@
 //
 // @match        https://federationbroker.cloudflareaccess.com/cdn-cgi/access/login/*
 // @grant        GM_getValue
+// @grant        GM_setValue
 // ==/UserScript==
 
 (function() {
     'use strict';
 
     let nameFromStore = GM_getValue("name", "")
+
+    // Register a menu command to set the IdP name
+    GM_registerMenuCommand("Set IdP Name", function () {
+        const current = GM_getValue("name", "");
+        const input = prompt("Enter your IdP name as it appears in the SAML link title (e.g., 'My Identity Provider'):", current);
+        if (input !== null) {
+            GM_setValue("name", input.trim());
+            alert(`IdP name set to: ${input.trim()}`);
+        }
+    });
 
     // Get the name from the userscript settings and error if not a string
     if (nameFromStore === "") {
